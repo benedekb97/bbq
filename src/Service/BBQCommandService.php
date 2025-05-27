@@ -88,14 +88,14 @@ readonly class BBQCommandService
         if (empty($users)) {
             return new JsonResponse([
                 'blocks' => [
-                    $this->getHeader('*Queue for '.$queue->name.' is empty.* :tada:'),
+                    $this->getHeader('Queue for '.$queue->name.' is empty. :tada:'),
                 ]
             ]);
         }
 
         return new JsonResponse([
             'blocks' => [
-                $this->getHeader('*Queue for '.$queue->name.'*'),
+                $this->getHeader('Queue for '.$queue->name.':'),
                 $this->getSection(
                     implode(PHP_EOL, array_map(
                         static function (QueuedUser $user): string
