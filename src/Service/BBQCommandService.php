@@ -9,6 +9,7 @@ use App\Entity\QueuedUser;
 use App\Repository\QueuedUserRepository;
 use DateInterval;
 use DateTime;
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
@@ -65,7 +66,7 @@ readonly class BBQCommandService
             ]);
         }
 
-        $user->deletedAt = new DateTime();
+        $user->deletedAt = new DateTimeImmutable();
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
