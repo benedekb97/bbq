@@ -50,6 +50,6 @@ class QueuedUser
 
     public function getUserLink(): string
     {
-        return sprintf('https://%s.slack.com/user/@%s', $this->queue->domain, $this->userId);
+        return sprintf('<@%s>', $this->userId);
     }
 }
