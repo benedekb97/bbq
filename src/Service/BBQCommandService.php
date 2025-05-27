@@ -109,6 +109,7 @@ readonly class BBQCommandService
             $section['fields'][] = [
                 'type' => 'mrkdwn',
                 'text' => $item,
+                'emoji' => true,
             ];
         }
 
