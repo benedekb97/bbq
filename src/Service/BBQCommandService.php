@@ -77,11 +77,11 @@ readonly class BBQCommandService
         ]);
     }
 
-    public function unrecognisedCommand(): JsonResponse
+    public function unrecognisedCommand(string $text): JsonResponse
     {
         return new JsonResponse([
             'blocks' => [
-                $this->getHeader(':doh: Unrecognised command'),
+                $this->getHeader(':doh: Unrecognised command \''.$text.'\'.'),
             ],
         ]);
     }

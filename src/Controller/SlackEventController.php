@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use ValueError;
 
 class SlackEventController extends AbstractController
 {
@@ -37,28 +38,36 @@ class SlackEventController extends AbstractController
     #[Route('slack/command', methods: [Request::METHOD_POST, Request::METHOD_GET])]
     public function command(Request $request): JsonResponse
     {
-        $command = $this->getCommand($request);
+        try {
+            $command = $this->getCommand($request);
 
-        return match (true) {
-            $command === BBQCommand::JOIN => $this->service->joinQueue(
-                $this->getQueue($request),
-                $request->get('user_id')
-            ),
-            $command === BBQCommand::LEAVE => $this->service->leaveQueue(
-                $this->getQueue($request),
-                $request->get('user_id')
-            ),
-            default => $this->service->unrecognisedCommand()
-        };
+            return match (true) {
+                $command === BBQCommand::JOIN => $this->service->joinQueue(
+                    $this->getQueue($request),
+                    $request->get('user_id')
+                ),
+                $command === BBQCommand::LEAVE => $this->service->leaveQueue(
+                    $this->getQueue($request),
+                    $request->get('user_id')
+                ),
+            };
+        } catch (ValueError) {
+            return $this->service->unrecognisedCommand($this->getCommandString($request));
+        }
     }
 
-    private function getCommand(Request $request): BBQCommand
+    private function getCommandString(Request $request): string
     {
         $requestText = $request->request->get('text');
 
         $commandParts = explode(' ', $requestText);
 
-        return BBQCommand::from($commandParts[0]);
+        return $commandParts[0];
+    }
+
+    private function getCommand(Request $request): BBQCommand
+    {
+        return BBQCommand::from($this->getCommandString($request));
     }
 
     private function getQueue(Request $request): Queue
