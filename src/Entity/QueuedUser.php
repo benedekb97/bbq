@@ -47,4 +47,9 @@ class QueuedUser
 
         return $this === $users[0];
     }
+
+    public function getUserLink(): string
+    {
+        return sprintf('https://%s.slack.com/user/@%s', $this->queue->domain, $this->userId);
+    }
 }

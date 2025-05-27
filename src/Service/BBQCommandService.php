@@ -100,7 +100,7 @@ readonly class BBQCommandService
                     implode(PHP_EOL, array_map(
                         static function (QueuedUser $user): string
                         {
-                            return '@'.$user->userId;
+                            return $user->getUserLink();
                         },
                         $users
                     ))
