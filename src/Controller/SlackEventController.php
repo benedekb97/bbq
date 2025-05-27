@@ -14,8 +14,8 @@ class SlackEventController extends AbstractController
     #[Route('slack/event', methods: [Request::METHOD_POST])]
     public function handle(Request $request): JsonResponse
     {
-        if ($request->get('type') === 'url_verification') {
-            $challenge = $request->get('challenge');
+        if ($request->request->get('type') === 'url_verification') {
+            $challenge = $request->request->get('challenge');
 
             return new JsonResponse([
                 'challenge' => $challenge,
