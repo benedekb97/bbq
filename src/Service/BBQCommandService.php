@@ -7,6 +7,7 @@ namespace App\Service;
 use App\Entity\Queue;
 use App\Entity\QueuedUser;
 use App\Repository\QueuedUserRepository;
+use App\Slack\MessageFormatter;
 use DateInterval;
 use DateTime;
 use DateTimeImmutable;
@@ -18,6 +19,7 @@ readonly class BBQCommandService
     public function __construct(
         private QueuedUserRepository $queuedUserRepository,
         private EntityManagerInterface $entityManager,
+        private MessageFormatter $messageFormatter,
     ) {}
 
     public function joinQueue(Queue $queue, string $userId): JsonResponse
@@ -27,7 +29,7 @@ readonly class BBQCommandService
         if ($user !== null) {
             return new JsonResponse([
                 'blocks' => [
-                    $this->getHeader(':doh: You are already in the '.$queue->name.' queue!')
+                    $this->messageFormatter->getHeader(':doh: You are already in the '.$queue->name.' queue!')
                 ]
             ]);
         }
@@ -47,8 +49,8 @@ readonly class BBQCommandService
 
         return new JsonResponse([
             'blocks' => [
-                $this->getHeader('Queue joined successfully!'),
-                $this->getSection(
+                $this->messageFormatter->getHeader('Queue joined successfully!'),
+                $this->messageFormatter->getSection(
                     '*Queue*'.PHP_EOL.$queue->name,
                     $queue->expiryInMinutes !== null ? '*Expiry length*'.PHP_EOL.($queue->expiryInMinutes).' minutes' : null,
                     '*Your place*'.PHP_EOL.$user->getPlaceInQueue(),
@@ -64,7 +66,7 @@ readonly class BBQCommandService
         if ($user === null) {
             return new JsonResponse([
                 'blocks' => [
-                    $this->getHeader(':doh: You never joined the ' . $queue->name . ' queue!')
+                    $this->messageFormatter->getHeader(':doh: You never joined the ' . $queue->name . ' queue!')
                 ]
             ]);
         }
@@ -76,7 +78,7 @@ readonly class BBQCommandService
 
         return new JsonResponse([
             'blocks' => [
-                $this->getHeader('You\'ve successfully left the ' . $queue->name . ' queue!'),
+                $this->messageFormatter->getHeader('You\'ve successfully left the ' . $queue->name . ' queue!'),
             ]
         ]);
     }
@@ -91,7 +93,7 @@ readonly class BBQCommandService
         if (empty($users)) {
             return new JsonResponse([
                 'blocks' => [
-                    $this->getHeader('Queue for '.$queue->name.' is empty. :tada:'),
+                    $this->messageFormatter->getHeader('Queue for '.$queue->name.' is empty. :tada:'),
                 ]
             ]);
         }
@@ -100,8 +102,8 @@ readonly class BBQCommandService
 
         return new JsonResponse([
             'blocks' => [
-                $this->getHeader('Queue for '.$queue->name.':'),
-                $this->getSection(
+                $this->messageFormatter->getHeader('Queue for '.$queue->name.':'),
+                $this->messageFormatter->getSection(
                     implode(PHP_EOL, array_map(
                         static function (QueuedUser $user) use (&$key): string
                         {
@@ -118,7 +120,7 @@ readonly class BBQCommandService
     {
         return new JsonResponse([
             'blocks' => [
-                $this->getHeader(':doh: Unrecognised command \''.$text.'\'.'),
+                $this->messageFormatter->getHeader(':doh: Unrecognised command \''.$text.'\'.'),
             ],
         ]);
     }
@@ -127,41 +129,8 @@ readonly class BBQCommandService
     {
         return new JsonResponse([
             'blocks' => [
-                $this->getHeader(':doh: Queue \''.$queue.'\' does not exist.')
+                $this->messageFormatter->getHeader(':doh: Queue \''.$queue.'\' does not exist.')
             ]
         ]);
-    }
-
-    private function getHeader(string $text): array
-    {
-        return [
-            'type' => 'header',
-            'text' => [
-                'type' => 'plain_text',
-                'text' => $text,
-                'emoji' => true,
-            ]
-        ];
-    }
-
-    private function getSection(?string ...$text): array
-    {
-        $section = [
-            'type' => 'section',
-            'fields' => [],
-        ];
-
-        foreach ($text as $item) {
-            if (empty($item)) {
-                continue;
-            }
-
-            $section['fields'][] = [
-                'type' => 'mrkdwn',
-                'text' => $item,
-            ];
-        }
-
-        return $section;
     }
 }

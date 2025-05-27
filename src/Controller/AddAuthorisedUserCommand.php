@@ -1,0 +1,59 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Controller;
+
+use App\Service\AuthorisedUserService;
+use App\Slack\MessageFormatter;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
+
+class AddAuthorisedUserCommand extends AbstractController
+{
+    public function __construct(
+        private readonly AuthorisedUserService $service,
+        private readonly MessageFormatter $messageFormatter,
+    ) {}
+
+    #[Route('slack/command/add-authorised-user')]
+    public function __invoke(Request $request): JsonResponse
+    {
+        if (!$this->service->isUserAuthorised(
+            $request->request->get('user_id'),
+            $domain = $request->request->get('team_domain'),
+        )) {
+            return new JsonResponse([
+                'blocks' => [
+                    $this->messageFormatter->getHeader(':alert: You aren\'t allowed to do that.')
+                ]
+            ]);
+        }
+
+        $commandText = $request->request->get('text');
+
+        $commandBits = explode(' ', $commandText);
+
+        if (empty($commandBits)) {
+            return new JsonResponse([
+                'blocks' => [
+                    $this->messageFormatter->getHeader('Please specify a user to authorise: /bbq-authorise-user @user')
+                ]
+            ]);
+        }
+
+        $userId = $commandBits[0];
+
+        $user = $this->service->authoriseUser($userId, $domain);
+
+        return new JsonResponse([
+            'blocks' => [
+                $this->messageFormatter->getHeader(
+                    sprintf('<@%s> Has been successfully authorised!', $user->userId)
+                )
+            ]
+        ]);
+    }
+}
