@@ -5,13 +5,18 @@ security:
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         users_in_memory: { memory: null }
+
+        slack_users:
+            memory:
+                users:
+                    slack: { password: '', roles: ['ROLE_USER''] }
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             lazy: true
-            provider: users_in_memory
+            provider: slack_users
             custom_authenticators:
                 - App\Security\Authenticator\SignedSlackAuthenticator
 

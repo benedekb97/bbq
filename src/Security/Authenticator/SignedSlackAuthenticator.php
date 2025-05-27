@@ -47,7 +47,7 @@ class SignedSlackAuthenticator extends AbstractAuthenticator
             throw new AuthenticationException('Could not validate request signature');
         }
 
-        return new SelfValidatingPassport(new UserBadge('anonymous'), [new PreAuthenticatedUserBadge()]);
+        return new SelfValidatingPassport(new UserBadge('slack'));
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
