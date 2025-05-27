@@ -17,8 +17,8 @@ security:
         main:
             lazy: true
             provider: slack_users
-            custom_authenticators:
-                - App\Security\Authenticator\SignedSlackAuthenticator
+#            custom_authenticators:
+#                - App\Security\Authenticator\SignedSlackAuthenticator
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

@@ -13,6 +13,7 @@
         "doctrine/doctrine-bundle": "^2.14",
         "doctrine/doctrine-migrations-bundle": "^3.4",
         "doctrine/orm": "^3.3",
+        "dragonmantank/cron-expression": "^3.4",
         "jolicode/slack-php-api": "^4.8",
         "nyholm/psr7": "^1.8",
         "symfony-bundles/json-request-bundle": "^4.2",
@@ -21,8 +22,10 @@
         "symfony/flex": "^2",
         "symfony/framework-bundle": "7.2.*",
         "symfony/http-client": "7.2.*",
+        "symfony/messenger": "7.2.*",
         "symfony/monolog-bundle": "^3.10",
         "symfony/runtime": "7.2.*",
+        "symfony/scheduler": "7.2.*",
         "symfony/security-bundle": "7.2.*",
         "symfony/yaml": "7.2.*"
     },
