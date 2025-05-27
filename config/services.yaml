@@ -1,0 +1,11 @@
+parameters:
+  slack.token: '%env(SLACK_TOKEN)%'
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  App\:
+    resource: '../src/'
+    exclude: '../src/{DependencyInjection,Entity,Kernel.php}'
