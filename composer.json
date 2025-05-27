@@ -9,6 +9,10 @@
         "php": ">=8.2",
         "ext-ctype": "*",
         "ext-iconv": "*",
+        "doctrine/dbal": "^3",
+        "doctrine/doctrine-bundle": "^2.14",
+        "doctrine/doctrine-migrations-bundle": "^3.4",
+        "doctrine/orm": "^3.3",
         "jolicode/slack-php-api": "^4.8",
         "nyholm/psr7": "^1.8",
         "symfony-bundles/json-request-bundle": "^4.2",
@@ -19,6 +23,7 @@
         "symfony/http-client": "7.2.*",
         "symfony/monolog-bundle": "^3.10",
         "symfony/runtime": "7.2.*",
+        "symfony/security-bundle": "7.2.*",
         "symfony/yaml": "7.2.*"
     },
     "config": {

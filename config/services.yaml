@@ -1,5 +1,6 @@
 parameters:
   slack.token: '%env(SLACK_TOKEN)%'
+  slack.signing-secret: '%env(SLACK_SIGNING_SECRET)%'
 
 services:
   _defaults:
@@ -9,3 +10,7 @@ services:
   App\:
     resource: '../src/'
     exclude: '../src/{DependencyInjection,Entity,Kernel.php}'
+
+  App\Security\Authenticator\SignedSlackAuthenticator:
+    arguments:
+      $signingSecret: '%slack.signing-secret%'
