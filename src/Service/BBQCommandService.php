@@ -43,12 +43,15 @@ readonly class BBQCommandService
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
+        $this->entityManager->refresh($user);
+
         return new JsonResponse([
             'blocks' => [
                 $this->getHeader('Queue joined successfully!'),
                 $this->getSection(
                     '*Queue*'.PHP_EOL.$queue->name,
-                    '*Expiry length*'.PHP_EOL.($queue->expiryInMinutes ?? ':dinkdonk:').' minutes'
+                    '*Expiry length*'.PHP_EOL.($queue->expiryInMinutes ?? ':dinkdonk:').' minutes',
+                    '*Your place*'.PHP_EOL.$user->getPlaceInQueue(),
                 ),
             ]
         ]);

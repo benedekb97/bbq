@@ -13,6 +13,7 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\ManyToOne;
+use InvalidArgumentException;
 
 #[Entity, HasLifecycleCallbacks]
 class QueuedUser
@@ -41,11 +42,26 @@ class QueuedUser
 
     public function isFirstInQueue(): bool
     {
+        return $this->getPlaceInQueue() === 1;
+    }
+
+    public function getPlaceInQueue(): ?int
+    {
         $users = $this->queue->getQueuedUsers()->getIterator();
 
         uasort($users, fn (self $a, self $b) => $a->createdAt <=> $b->createdAt);
 
-        return $this === $users[0];
+        $place = 1;
+
+        foreach ($users as $user) {
+            if ($user === $this) {
+                return $place;
+            }
+
+            $place++;
+        }
+
+        return null;
     }
 
     public function getUserLink(): string
