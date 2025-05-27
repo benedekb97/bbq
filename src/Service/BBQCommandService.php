@@ -93,14 +93,16 @@ readonly class BBQCommandService
             ]);
         }
 
+        $key = 1;
+
         return new JsonResponse([
             'blocks' => [
                 $this->getHeader('Queue for '.$queue->name.':'),
                 $this->getSection(
                     implode(PHP_EOL, array_map(
-                        static function (QueuedUser $user, int $key): string
+                        static function (QueuedUser $user) use (&$key): string
                         {
-                            return ($key + 1) . '. ' . $user->getUserLink();
+                            return ($key++) . '. ' . $user->getUserLink();
                         },
                         $users
                     ))
