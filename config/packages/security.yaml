@@ -9,7 +9,7 @@ security:
         slack_users:
             memory:
                 users:
-                    slack: { password: '', roles: ['ROLE_USER''] }
+                    slack: { password: '', roles: ['ROLE_USER'] }
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
