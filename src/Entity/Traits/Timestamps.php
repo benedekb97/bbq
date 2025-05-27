@@ -16,7 +16,7 @@ trait Timestamps
     #[Column(type: Types::DATETIME_IMMUTABLE)]
     public ?DateTimeInterface $createdAt = null;
 
-    #[Column(type: Types::DATETIME_IMMUTABLE)]
+    #[Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
     public ?DateTimeInterface $updatedAt = null;
 
     #[PrePersist]
