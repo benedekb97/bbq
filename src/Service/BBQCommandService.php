@@ -47,8 +47,8 @@ readonly class BBQCommandService
             'blocks' => [
                 $this->getHeader('Queue joined successfully!'),
                 $this->getSection(
-                    '*Queue*\n'.$queue->name,
-                    '*Expiry length*\n'.($queue->expiryInMinutes ?? ':dinkdonk:').' minutes'
+                    '*Queue*'.PHP_EOL.$queue->name,
+                    '*Expiry length*'.PHP_EOL.($queue->expiryInMinutes ?? ':dinkdonk:').' minutes'
                 ),
             ]
         ]);

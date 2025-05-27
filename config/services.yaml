@@ -1,6 +1,7 @@
 parameters:
   slack.token: '%env(SLACK_TOKEN)%'
   slack.signing-secret: '%env(SLACK_SIGNING_SECRET)%'
+  slack.auth-enabled: '%env(SLACK_AUTH_ENABLED)%'
 
 services:
   _defaults:
