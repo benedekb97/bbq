@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Queue;
 use App\Entity\QueuedUser;
 use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -15,6 +16,18 @@ class QueuedUserRepository extends ServiceEntityRepository implements ObjectRepo
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, QueuedUser::class);
+    }
+
+    public function findUserInQueue(Queue $queue, string $userId): ?QueuedUser
+    {
+        return $this->createQueryBuilder('qu')
+            ->where('qu.queue = :queue')
+            ->andWhere('qu.userId = :userId')
+            ->andWhere('qu.deletedAt is null')
+            ->setParameter('queue', $queue)
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     public function deleteAllExpired(): void

@@ -12,10 +12,11 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
+use Doctrine\ORM\Mapping\HasLifecycleCallbacks;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\OneToMany;
 
-#[Entity]
+#[Entity(repositoryClass: QueuedUserRepository::class), HasLifecycleCallbacks]
 class Queue
 {
     use Timestamps;
