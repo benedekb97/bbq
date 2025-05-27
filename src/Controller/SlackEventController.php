@@ -8,9 +8,11 @@ use App\Entity\Queue;
 use App\Enum\BBQCommand;
 use App\Repository\QueueRepository;
 use App\Service\BBQCommandService;
+use Doctrine\ORM\EntityNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use ValueError;
 
@@ -53,6 +55,8 @@ class SlackEventController extends AbstractController
             };
         } catch (ValueError) {
             return $this->service->unrecognisedCommand($this->getCommandString($request));
+        } catch (EntityNotFoundException $exception) {
+            return $this->service->queueNotFound($exception->getMessage());
         }
     }
 
@@ -78,10 +82,16 @@ class SlackEventController extends AbstractController
 
         $queueName = $commandParts[1] ?? null;
 
-        return $queueName === null
+        $queue = $queueName === null
             ? $this->queueRepository->findDefault()
             : $this->queueRepository->findOneBy([
                 'name' => $queueName,
             ]);
+
+        if ($queue === null) {
+            throw new EntityNotFoundException($queueName);
+        }
+
+        return $queue;
     }
 }

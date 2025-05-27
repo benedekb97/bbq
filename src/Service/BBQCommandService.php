@@ -87,6 +87,15 @@ readonly class BBQCommandService
         ]);
     }
 
+    public function queueNotFound(string $queue): JsonResponse
+    {
+        return new JsonResponse([
+            'blocks' => [
+                $this->getSection(':doh: Queue \''.$queue.'\' does not exist.')
+            ]
+        ]);
+    }
+
     private function getHeader(string $text): array
     {
         return [
