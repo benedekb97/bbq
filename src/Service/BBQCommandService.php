@@ -98,9 +98,9 @@ readonly class BBQCommandService
                 $this->getHeader('Queue for '.$queue->name.':'),
                 $this->getSection(
                     implode(PHP_EOL, array_map(
-                        static function (QueuedUser $user): string
+                        static function (QueuedUser $user, int $key): string
                         {
-                            return $user->getUserLink();
+                            return ($key + 1) . '. ' . $user->getUserLink();
                         },
                         $users
                     ))
