@@ -36,6 +36,9 @@ class Queue
     #[Column(type: Types::INTEGER, nullable: true)]
     public ?int $expiryInMinutes = null;
 
+    #[Column(type: Types::STRING, nullable: true)]
+    public ?string $domain = null;
+
     public function __construct()
     {
         $this->users = new ArrayCollection();

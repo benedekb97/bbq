@@ -86,9 +86,10 @@ class SlackEventController extends AbstractController
         $queueName = $commandParts[1] ?? null;
 
         $queue = $queueName === null
-            ? $this->queueRepository->findDefault()
+            ? $this->queueRepository->findDefault($request->request->get('team_domain'))
             : $this->queueRepository->findOneBy([
                 'name' => $queueName,
+                'domain' => $request->request->get('team_domain'),
             ]);
 
         if ($queue === null) {

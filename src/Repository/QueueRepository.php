@@ -16,12 +16,14 @@ class QueueRepository extends ServiceEntityRepository implements ObjectRepositor
         parent::__construct($registry, Queue::class);
     }
 
-    public function findDefault(): Queue
+    public function findDefault(string $domain): Queue
     {
         $queue = $this->createQueryBuilder('q')
             ->where('q.default = :default')
+            ->andWhere('q.domain = :domain')
             ->orderBy('q.id', 'desc')
             ->setParameter('default', true)
+            ->setParameter('domain', $domain)
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
@@ -31,6 +33,7 @@ class QueueRepository extends ServiceEntityRepository implements ObjectRepositor
 
             $queue->name = 'deployment';
             $queue->default = true;
+            $queue->domain = $domain;
 
             $this->getEntityManager()->persist($queue);
             $this->getEntityManager()->flush();
