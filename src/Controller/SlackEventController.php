@@ -28,5 +28,18 @@ class SlackEventController extends AbstractController
     #[Route('slack/command', methods: [Request::METHOD_POST])]
     public function command(Request $request): JsonResponse
     {
+        return new JsonResponse(
+            [
+                'blocks' => [
+                    [
+                        'type' => 'section',
+                        'text' => [
+                            'type' => 'mrkdwn',
+                            'text' => '*So long and thanks for all the fish*',
+                        ]
+                    ]
+                ]
+            ]
+        );
     }
 }
