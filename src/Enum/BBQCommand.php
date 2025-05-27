@@ -8,4 +8,5 @@ enum BBQCommand: string
 {
     case JOIN = 'join';
     case LEAVE = 'leave';
+    case LIST = 'list';
 }

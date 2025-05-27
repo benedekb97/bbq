@@ -43,14 +43,17 @@ class SlackEventController extends AbstractController
         try {
             $command = $this->getCommand($request);
 
-            return match (true) {
-                $command === BBQCommand::JOIN => $this->service->joinQueue(
+            return match ($command) {
+                BBQCommand::JOIN => $this->service->joinQueue(
                     $this->getQueue($request),
                     $request->get('user_id')
                 ),
-                $command === BBQCommand::LEAVE => $this->service->leaveQueue(
+                BBQCommand::LEAVE => $this->service->leaveQueue(
                     $this->getQueue($request),
                     $request->get('user_id')
+                ),
+                BBQCommand::LIST => $this->service->list(
+                    $this->getQueue($request),
                 ),
             };
         } catch (ValueError) {
