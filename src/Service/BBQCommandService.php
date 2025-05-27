@@ -27,7 +27,7 @@ readonly class BBQCommandService
         if ($user !== null) {
             return new JsonResponse([
                 'blocks' => [
-                    $this->getSection(':doh: You are already in the '.$queue->name.' queue!')
+                    $this->getHeader(':doh: You are already in the '.$queue->name.' queue!')
                 ]
             ]);
         }
@@ -64,7 +64,7 @@ readonly class BBQCommandService
         if ($user === null) {
             return new JsonResponse([
                 'blocks' => [
-                    $this->getSection(':doh: You never joined the ' . $queue->name . ' queue!')
+                    $this->getHeader(':doh: You never joined the ' . $queue->name . ' queue!')
                 ]
             ]);
         }
@@ -118,7 +118,7 @@ readonly class BBQCommandService
     {
         return new JsonResponse([
             'blocks' => [
-                $this->getSection(':doh: Unrecognised command \''.$text.'\'.'),
+                $this->getHeader(':doh: Unrecognised command \''.$text.'\'.'),
             ],
         ]);
     }
@@ -127,7 +127,7 @@ readonly class BBQCommandService
     {
         return new JsonResponse([
             'blocks' => [
-                $this->getSection(':doh: Queue \''.$queue.'\' does not exist.')
+                $this->getHeader(':doh: Queue \''.$queue.'\' does not exist.')
             ]
         ]);
     }
