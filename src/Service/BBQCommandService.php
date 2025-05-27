@@ -50,7 +50,7 @@ readonly class BBQCommandService
                 $this->getHeader('Queue joined successfully!'),
                 $this->getSection(
                     '*Queue*'.PHP_EOL.$queue->name,
-                    '*Expiry length*'.PHP_EOL.($queue->expiryInMinutes ?? ':dinkdonk:').' minutes',
+                    $queue->expiryInMinutes !== null ? '*Expiry length*'.PHP_EOL.($queue->expiryInMinutes).' minutes' : null,
                     '*Your place*'.PHP_EOL.$user->getPlaceInQueue(),
                 ),
             ]
@@ -144,7 +144,7 @@ readonly class BBQCommandService
         ];
     }
 
-    private function getSection(string ...$text): array
+    private function getSection(?string ...$text): array
     {
         $section = [
             'type' => 'section',
@@ -152,6 +152,10 @@ readonly class BBQCommandService
         ];
 
         foreach ($text as $item) {
+            if (empty($item)) {
+                continue;
+            }
+
             $section['fields'][] = [
                 'type' => 'mrkdwn',
                 'text' => $item,
