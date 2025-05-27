@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Entity\Traits\Timestamps;
+use ArrayIterator;
 use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping\Column;
@@ -48,6 +49,10 @@ class QueuedUser
     public function getPlaceInQueue(): ?int
     {
         $users = $this->queue->getQueuedUsers()->getIterator();
+
+        if ($users instanceof ArrayIterator) {
+            $users = $users->getArrayCopy();
+        }
 
         uasort($users, fn (self $a, self $b) => $a->createdAt <=> $b->createdAt);
 
