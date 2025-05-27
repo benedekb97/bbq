@@ -27,7 +27,7 @@ class Queue
     #[Column(type: Types::STRING)]
     public ?string $name = null;
 
-    #[Column(type: Types::BOOLEAN)]
+    #[Column(name: '`default`', type: Types::BOOLEAN)]
     public bool $default = false;
 
     #[OneToMany(targetEntity: QueuedUser::class, mappedBy: 'queue')]
