@@ -47,7 +47,7 @@ class AddAuthorisedUserCommand extends AuthorisedUserCommand
 
         preg_match('/(U[A-Z0-9]{10})/i', $userId, $matches);
 
-        preg_match('/\|([A-Za-z0-9]+)>/', $userId, $usernameMatches);
+        preg_match('/\|([A-Za-z0-9\w]+)>/', $userId, $usernameMatches);
 
         if (empty($matches)) {
             return new JsonResponse([
