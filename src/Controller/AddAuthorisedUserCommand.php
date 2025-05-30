@@ -48,7 +48,7 @@ class AddAuthorisedUserCommand extends AbstractController
 
         $matches = [];
 
-        preg_match('/(U[A-Z0-9]{10})/i', $userId, $matches);
+        preg_match('/\|([A-Za-z0-9]+)>/i', $userId, $matches);
 
         if (empty($matches)) {
             return new JsonResponse([
