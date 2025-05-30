@@ -43,11 +43,10 @@ class AddAuthorisedUserCommand extends AuthorisedUserCommand
         $userId = $commandBits[0];
 
         $matches = [];
-        $usernameMatches = [];
 
         preg_match('/(U[A-Z0-9]{10})/i', $userId, $matches);
 
-        preg_match('/\|([A-Za-z0-9\w]+)>/', $userId, $usernameMatches);
+        $username = explode('>', explode('|', $userId)[1])[0];
 
         if (empty($matches)) {
             return new JsonResponse([
@@ -57,7 +56,7 @@ class AddAuthorisedUserCommand extends AuthorisedUserCommand
             ]);
         }
 
-        $user = $this->service->authoriseUser($matches[1], $domain, $usernameMatches[1]);
+        $user = $this->service->authoriseUser($matches[1], $domain, $username);
 
         return new JsonResponse([
             'blocks' => [

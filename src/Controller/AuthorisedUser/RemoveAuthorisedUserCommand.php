@@ -40,11 +40,10 @@ class RemoveAuthorisedUserCommand extends AuthorisedUserCommand
         $userId = $commandBits[0];
 
         $matches = [];
-        $usernameMatches = [];
 
         preg_match('/(U[A-Z0-9]{10})/i', $userId, $matches);
 
-        preg_match('/\|([A-Za-z0-9]+)>/', $userId, $usernameMatches);
+        $username = explode('>', explode('|', $userId)[1])[0];
 
         if (empty($matches)) {
             return new JsonResponse([
@@ -67,7 +66,7 @@ class RemoveAuthorisedUserCommand extends AuthorisedUserCommand
         return new JsonResponse([
             'blocks' => [
                 $this->messageFormatter->getHeader(
-                    sprintf('<@%s> Has been removed!', $usernameMatches[1])
+                    sprintf('<@%s> Has been removed!', $username)
                 )
             ]
         ]);
