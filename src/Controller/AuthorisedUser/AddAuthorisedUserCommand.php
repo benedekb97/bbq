@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\AuthorisedUser;
 
+use App\Entity\AuthorisedUser;
 use App\Service\AuthorisedUserService;
 use App\Slack\MessageFormatter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -11,13 +12,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
-class AddAuthorisedUserCommand extends AbstractController
+class AddAuthorisedUserCommand extends AuthorisedUserCommand
 {
-    public function __construct(
-        private readonly AuthorisedUserService $service,
-        private readonly MessageFormatter $messageFormatter,
-    ) {}
-
     #[Route('slack/command/add-authorised-user')]
     public function __invoke(Request $request): JsonResponse
     {

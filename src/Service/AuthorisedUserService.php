@@ -46,4 +46,19 @@ readonly class AuthorisedUserService
             'domain' => $domain,
         ]));
     }
+
+    public function deauthoriseUser(string $userId, string $domain): void
+    {
+        $user = $this->repository->findOneBy([
+            'userId' => $userId,
+            'domain' => $domain,
+        ]);
+
+        if ($user === null) {
+            return;
+        }
+
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
+    }
 }
