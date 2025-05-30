@@ -46,7 +46,19 @@ class AddAuthorisedUserCommand extends AbstractController
 
         $userId = $commandBits[0];
 
-        $user = $this->service->authoriseUser($userId, $domain);
+        $matches = [];
+
+        preg_match('/(U[A-Z0-9]{10})/i', $userId, $matches);
+
+        if (empty($matches)) {
+            return new JsonResponse([
+                'blocks' => [
+                    $this->messageFormatter->getHeader(':doh: Could not extract user ID from message'),
+                ]
+            ]);
+        }
+
+        $user = $this->service->authoriseUser($matches[0], $domain);
 
         return new JsonResponse([
             'blocks' => [
