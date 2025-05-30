@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class RemoveAuthorisedUserCommand extends AuthorisedUserCommand
 {
-    #[Route('/slack/command/remove-authorised-user')]
+    #[Route('slack/command/remove-authorised-user')]
     public function __invoke(Request $request): JsonResponse
     {
         if (!$this->service->isUserAuthorised(
