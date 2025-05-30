@@ -15,7 +15,7 @@ class RemoveAuthorisedUserCommand extends AuthorisedUserCommand
     public function __invoke(Request $request): JsonResponse
     {
         if (!$this->service->isUserAuthorised(
-            $request->request->get('user_id'),
+            $currentUser = $request->request->get('user_id'),
             $domain = $request->request->get('team_domain'),
         )) {
             return new JsonResponse([
@@ -50,6 +50,14 @@ class RemoveAuthorisedUserCommand extends AuthorisedUserCommand
             return new JsonResponse([
                 'blocks' => [
                     $this->messageFormatter->getHeader(':doh: Could not extract user ID from message'),
+                ]
+            ]);
+        }
+
+        if ($matches[1] === $currentUser) {
+            return new JsonResponse([
+                'blocks' => [
+                    $this->messageFormatter->getHeader(':doh: You can\'t remove yourself'),
                 ]
             ]);
         }
