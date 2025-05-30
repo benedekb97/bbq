@@ -47,8 +47,11 @@ class AddAuthorisedUserCommand extends AbstractController
         $userId = $commandBits[0];
 
         $matches = [];
+        $usernameMatches = [];
 
-        preg_match('/\|([A-Za-z0-9]+)>/i', $userId, $matches);
+        preg_match('/(U[A-Z0-9]{10})/i', $userId, $matches);
+
+        preg_match('/\|([A-Za-z0-9]+)>/', $userId, $usernameMatches);
 
         if (empty($matches)) {
             return new JsonResponse([
@@ -58,12 +61,12 @@ class AddAuthorisedUserCommand extends AbstractController
             ]);
         }
 
-        $user = $this->service->authoriseUser($matches[1], $domain);
+        $user = $this->service->authoriseUser($matches[1], $domain, $usernameMatches[1]);
 
         return new JsonResponse([
             'blocks' => [
                 $this->messageFormatter->getHeader(
-                    sprintf('<@%s> Has been successfully authorised!', $user->userId)
+                    sprintf('<@%s> Has been successfully authorised!', $user->username)
                 )
             ]
         ]);

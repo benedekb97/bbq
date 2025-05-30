@@ -21,4 +21,7 @@ class AuthorisedUser
 
     #[Column(type: Types::STRING)]
     public ?string $userId = null;
+
+    #[Column(type: Types::STRING)]
+    public ?string $username = null;
 }

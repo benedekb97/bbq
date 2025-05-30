@@ -15,11 +15,12 @@ readonly class AuthorisedUserService
         private AuthorisedUserRepository $repository,
     ) {}
 
-    public function authoriseUser(string $userId, string $domain): AuthorisedUser
+    public function authoriseUser(string $userId, string $domain, string $username): AuthorisedUser
     {
         $user = $this->repository->findOneBy([
             'userId' => $userId,
             'domain' => $domain,
+            'username' => $username,
         ]);
 
         if ($user instanceof AuthorisedUser) {
@@ -30,6 +31,7 @@ readonly class AuthorisedUserService
 
         $user->userId = $userId;
         $user->domain = $domain;
+        $user->username = $username;
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
