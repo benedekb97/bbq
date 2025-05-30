@@ -58,7 +58,7 @@ class AddAuthorisedUserCommand extends AbstractController
             ]);
         }
 
-        $user = $this->service->authoriseUser($matches[0], $domain);
+        $user = $this->service->authoriseUser($matches[1], $domain);
 
         return new JsonResponse([
             'blocks' => [
